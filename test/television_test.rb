@@ -18,5 +18,12 @@ class NetFlix::TelevisionTest < Test::Unit::TestCase
       end
     end
   end
+  
+  context "episodes" do
+    should "return an array of tv episodes" do
+      NetFlix::Request.expects(:new).returns(stub(:send => load_fixture_file('television_episodes.xml')))
+      assert_equal @television.episodes.count, 13
+    end
+  end
 
 end

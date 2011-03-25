@@ -26,7 +26,7 @@ class NetflixTest < Test::Unit::TestCase
   def test_that_request_is_logged_when_sent
     request = NetFlix::Request.new(:url => 'some_url', :parameters => {'logme' => 'please'})
     NetFlix.expects(:log).with('some_url?logme=please')
-    request.log
+    request.log('some_url?logme=please')
   end
 
   context :encoding do
