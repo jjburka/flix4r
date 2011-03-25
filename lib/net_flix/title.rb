@@ -60,7 +60,14 @@ module NetFlix
     def to_s
       title || 'unknown title'
     end
-
+    
+    def formats
+      @formats ||= begin 
+        FormatBuilder.from_xml(fetch_link('formats'))
+      rescue
+        ''
+      end      
+    end
     private
     def fetch_link(title)
       link_url = ( @xdoc / "//catalog_title/link[@title='#{title}']/@href" ).to_s

@@ -14,7 +14,7 @@ module NetFlix
         :valid => 86400,  # 1 day       Maximum time to use old data
                           #             :forever is a valid option
         :period => 60,    # 1 minute    Maximum frequency to call API
-        :timeout => 5     # 5 seconds   API response timeout
+        :timeout => 60     # 5 seconds   API response timeout
       }
     end
     
@@ -36,16 +36,18 @@ module NetFlix
       URI.parse "#{url}?#{parameter_string}"
     end
 
-    def log
-      NetFlix.log(target.to_s)
+    def log(message)
+      NetFlix.log(message)
     end
 
     def send
       merged_cache_options = self.class.default_cache_options.merge(cache_options)
       APICache.get(target.to_s, merged_cache_options ) do
         authenticator.sign!
-        log
-        Net::HTTP.get(target)
+        log(target.to_s)
+        response = Net::HTTP.get(target)
+        log("Response\n#{response}")
+        response
       end
     end
 
